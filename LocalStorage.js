@@ -1,7 +1,7 @@
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
-    "dojo/_base/json",
+    "dojo/json",
     "dojo/store/util/QueryResults",
     "dojo/store/util/SimpleQueryEngine"
 ], function (
@@ -11,7 +11,8 @@ define([
     QueryResults,
     SimpleQueryEngine
 ) {
-    //"use strict";
+    "use strict";
+    
     return declare(null, {
 
         // idProperty: String
@@ -22,6 +23,16 @@ define([
         // queryEngine: Function
         //      Defines the query engine to use for querying the data store
         queryEngine: SimpleQueryEngine,
+        
+        // subsetProperty: String
+        //      Limit this store by configuration to work with a specified subset of objects
+        //      Before storing an object, the store adds a property with this name to it
+        //      This property is removed upon object retrieval, making this feature transparent to a client
+        subsetProperty: null,
+        
+        // subsetName: mixed
+        //      Define a subset name. See subsetProperty for more information
+        subsetName: null,
 
         constructor: function (options) {
             // summary:
@@ -38,20 +49,26 @@ define([
             //      Retrieves an object by its identity
             // id: Number
             //      The key of the key/value pair as stored in localStorage
-            //      ##The identity to use to lookup the object
+            //      If not already present, the id is added to the returned object - object[this.idProperty]
             // returns: Object
             //      The value in the store that matches the given id (key).
-
-            if (id === undefined) {
-                return null;
-            }
-
-            var item = localStorage.getItem(id);
+            var item = localStorage.getItem(id), object = null;
 
             try {
-                return json.fromJson(item);
+                object = json.fromJson(item);
+                object[this.idProperty] = id;
+                
+                if (this.subsetProperty) {
+                    if (object[this.subsetProperty] !== this.subsetName) {
+                        return undefined;
+                    } else {
+                        delete object[this.subsetProperty];
+                    }
+                }
+                
+                return object;
             } catch(e) {
-                return item;
+                return undefined;
             }
         },
 
@@ -74,22 +91,26 @@ define([
             //      property if a specific id is to be used.
             // returns: Number
             var id = options && options.id || object[this.idProperty] || Math.random();
+            
+            if(this.subsetProperty) {
+                object[this.subsetProperty] = this.subsetName;
+            }
+            
             localStorage.setItem(id, json.toJson(object));
             return id;
         },
 
         add: function (object, options) {
             // summary:
-            // C    reates an object, throws an error if the object already exists
+            //      Creates an object, throws an error if the object already exists
             // object: Object
             //      The object to store.
             // options: Object?
             //      Additional metadata for storing the data. Includes an "id"
             //      property if a specific id is to be used.
             // returns: Number
-
             if (this.get(object[this.idProperty])) {
-                //throw new Error("Object already exists");
+                throw new Error("Object already exists");
             }
 
             return this.put(object, options);
