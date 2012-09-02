@@ -30,7 +30,7 @@ LocalStorage only works with key/value pairs where value is a string. Dojo-local
         var result = store.query({
             year: 2006
         },{
-            sort: [{ attribute:"id", descending: false }]
+            sort: [{ attribute:"year", descending: false }]
         });
         
         // updating an object
@@ -52,7 +52,7 @@ LocalStorage only works with key/value pairs where value is a string. Dojo-local
 
 ## Working With A Data Subset By Configuration
 
-Sometimes it can be desirable to configure a store such that it only operates on a subset of data. This feature can be helpful to use LocalStorage as a read/write replacement for a remote API. Transparently to a client, Dojo-local-storage adds a property to each object it stores and removes it upon retrieval. Name and value of this property can be passed to the constructor upon instantiation
+Sometimes it can be desirable to configure a store such that it only operates on a subset of data. This feature can be helpful to use LocalStorage as a read/writeable replacement for a remote API during development. Transparently to a client, Dojo-local-storage adds a property to each object it stores and removes it upon retrieval. Name and value of this property can be passed to the constructor upon instantiation
 
     var store = new LocalStorage({
         subsetProperty: 'mySubsetProperty',
