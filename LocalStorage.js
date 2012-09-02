@@ -55,7 +55,7 @@ define([
             var item = localStorage.getItem(id), object = null;
 
             try {
-                object = json.fromJson(item);
+                object = json.parse(item);
                 object[this.idProperty] = id;
                 
                 if (this.subsetProperty) {
@@ -96,7 +96,7 @@ define([
                 object[this.subsetProperty] = this.subsetName;
             }
             
-            localStorage.setItem(id, json.toJson(object));
+            localStorage.setItem(id, json.stringify(object));
             return id;
         },
 
