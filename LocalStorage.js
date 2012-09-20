@@ -1,3 +1,6 @@
+/*jslint browser: true */
+/*global define: true */
+
 define([
     "dojo/_base/declare",
     "dojo/_base/lang",
@@ -12,7 +15,7 @@ define([
     SimpleQueryEngine
 ) {
     "use strict";
-    
+
     return declare(null, {
 
         // idProperty: String
@@ -23,13 +26,13 @@ define([
         // queryEngine: Function
         //      Defines the query engine to use for querying the data store
         queryEngine: SimpleQueryEngine,
-        
+
         // subsetProperty: String
         //      Limit this store by configuration to work with a specified subset of objects
         //      Before storing an object, the store adds a property with this name to it
         //      This property is removed upon object retrieval, making this feature transparent to a client
         subsetProperty: null,
-        
+
         // subsetName: mixed
         //      Define a subset name. See subsetProperty for more information
         subsetName: null,
@@ -57,17 +60,17 @@ define([
             try {
                 object = json.parse(item);
                 object[this.idProperty] = id;
-                
+
                 if (this.subsetProperty) {
                     if (object[this.subsetProperty] !== this.subsetName) {
                         return undefined;
-                    } else {
-                        delete object[this.subsetProperty];
                     }
+
+                    delete object[this.subsetProperty];
                 }
-                
+
                 return object;
-            } catch(e) {
+            } catch (e) {
                 return undefined;
             }
         },
@@ -90,12 +93,12 @@ define([
             //      Additional metadata for storing the data. Includes an "id"
             //      property if a specific id is to be used.
             // returns: Number
-            var id = options && options.id || object[this.idProperty] || Math.random();
-            
-            if(this.subsetProperty) {
+            var id = (options && options.id) || object[this.idProperty] || Math.random();
+
+            if (this.subsetProperty) {
                 object[this.subsetProperty] = this.subsetName;
             }
-            
+
             localStorage.setItem(id, json.stringify(object));
             return id;
         },
@@ -157,7 +160,7 @@ define([
 
             var data = [], i = 0, id = null, item = null;
 
-            for (i = 0; i < localStorage.length; i++) {
+            for (i = 0; i < localStorage.length; i += 1) {
                 id = localStorage.key(i);
                 item = this.get(id);
 
@@ -174,20 +177,19 @@ define([
             //      Sets the given data as the source for this store, and indexes it
             // data: Object[]
             //      An array of objects to use as the source of data.
+
+            var i = 0, object = null;
+
             if (data.items) {
                 // just for convenience with the data format IFRS expects
                 this.idProperty = data.identifier;
                 data = this.data = data.items;
             }
 
-            for (var i = 0, l = data.length; i < l; i++) {
-                var object = data[i];
+            for (i = 0; i < data.length; i += 1) {
+                object = data[i];
                 this.put(object);
             }
-        },
-        
-        clear: function () {
-            localStorage.clear();
         }
     });
 });
