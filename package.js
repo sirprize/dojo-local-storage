@@ -5,7 +5,7 @@ var profile = (function () {
             //"dojo-local-storage/package.json": 1
         },
         amdExcludes = {},
-        isTestRe = /\/test\//
+        isTestRe = /\/(tests|node_modules)\//
     ;
 
     return {

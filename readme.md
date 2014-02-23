@@ -59,6 +59,11 @@ Sometimes it can be desirable to configure a store such that it only operates on
         subsetName: "movies"
     });
 
+## Running Tests
+
+1. `cd <path-to-dojo-local-storage>`
+1. `npm install`
+1. Point browser to `http://<localhost>/dojo-local-storage/node_modules/intern/client.html?config=tests/intern`
 
 ## Thanks
 

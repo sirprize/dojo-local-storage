@@ -1,6 +1,10 @@
 {
     "name": "dojo-local-storage",
     "description": "LocalStorage wrapper providing dojo/store interface",
-    "version": 0.1,
-    "dojoBuild": "package.js"
+    "version": "0.1.0",
+    "dojoBuild": "package.js",
+    "devDependencies": {
+        "intern": "~1.4.0",
+        "dojo": "~1.9.2"
+    }
 }
