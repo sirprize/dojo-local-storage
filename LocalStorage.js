@@ -161,7 +161,8 @@ define([
             var data = [], i = 0, id = null, item = null;
 
             for (i = 0; i < localStorage.length; i += 1) {
-                id = localStorage.key(i);
+                id = localStorage.key(i); // returns string
+                id = (/^-?\d+(\.\d+)?$/.test(id)) ? id * 1 : id; // typecast if id looks like int
                 item = this.get(id);
 
                 if (item) {
