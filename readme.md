@@ -13,41 +13,41 @@ LocalStorage only works with key/value pairs where value is a string. Dojo-local
 
 ## Usage
 
-<!-- scribble-language-hint: language-javascript -->
-
-    require(["dojo-local-storage/LocalStorage"], function (LocalStorage) {
-        var store = new LocalStorage({
-            idProperty: 'id'
-        });
-        
-        // storing an object
-        var id = store.add({
-            title: 'Elementarteilchen',
-            year: 2006
-        },{
-            id: 'abc'
-        });
-        
-        // querying the store
-        var result = store.query({
-            year: 2006
-        },{
-            sort: [{ attribute:"year", descending: false }]
-        });
-        
-        // updating an object
-        var id = store.put({
-            id: 'abc',
-            title: 'Elementarteilchen',
-            year: 2006
-        });
-        
-        // getting an object
-        var object = store.get('abc');
-        
-        // deleting an object
-        store.remove('abc');
+```js
+require(["dojo-local-storage/LocalStorage"], function (LocalStorage) {
+    var store = new LocalStorage({
+        idProperty: 'id'
     });
+
+    // storing an object
+    var id = store.add({
+        title: 'Elementarteilchen',
+        year: 2006
+    },{
+        id: 'abc'
+    });
+
+    // querying the store
+    var result = store.query({
+        year: 2006
+    },{
+        sort: [{ attribute:"year", descending: false }]
+    });
+
+    // updating an object
+    var id = store.put({
+        id: 'abc',
+        title: 'Elementarteilchen',
+        year: 2006
+    });
+
+    // getting an object
+    var object = store.get('abc');
+
+    // deleting an object
+    store.remove('abc');
+});
+```
 
 ## Working With A Data Subset By Configuration
 
