@@ -3,7 +3,6 @@ define([
     'intern/chai!assert',
     'dojo-local-storage/LocalStorage'
 ], function (registerSuite, assert, LocalStorage) {
-    var store;
 
     var dumpLocalStorage = function () {
         for (i = 0; i < localStorage.length; i += 1) {
@@ -21,17 +20,7 @@ define([
         name: 'dojo-local-storage/LocalStorage',
 
         setup: function () {
-            clearLocalStorage();
-
-            store = new LocalStorage({
-                data: [
-                    { id: 1, name: 'one', prime: true },
-                    { id: 2, name: 'two', prime: false },
-                    { id: 3, name: 'three', prime: true },
-                    { id: 4, name: 'four', prime: false },
-                    { id: 5, name: 'five', prime: true }
-                ]
-            });
+            //clearLocalStorage();
         },
 
         teardown: function () {
@@ -40,11 +29,19 @@ define([
 
         '.get': [
             function () {
-                var expected = {
-                    id: 4,
-                    name: 'four',
-                    prime: false
-                }
+                clearLocalStorage();
+
+                var store = new LocalStorage({
+                        data: [
+                            { id: 4, name: 'four', prime: false }
+                        ]
+                    }),
+                    expected = {
+                        id: 4,
+                        name: 'four',
+                        prime: false
+                    }
+                ;
 
                 assert.deepEqual(store.get(4), expected, 'store should get correct object based on id');
             }
@@ -52,14 +49,30 @@ define([
 
         '.getIdentity': [
             function () {
-                var item = store.get(3);
+                clearLocalStorage();
+
+                var store = new LocalStorage({
+                        data: [
+                            { id: 3, name: 'three', prime: true }
+                        ]
+                    }),
+                    item = store.get(3)
+                ;
+
                 assert.strictEqual(store.getIdentity(item), 3, 'identifying property (id) should be returned for item');
             }
         ],
 
         '.put': [
             function () {
-                var four = store.get(4),
+                clearLocalStorage();
+
+                var store = new LocalStorage({
+                        data: [
+                            { id: 4, name: 'four', prime: false }
+                        ]
+                    }),
+                    four = store.get(4),
                     expected = {
                         id: 4,
                         name: 'four',
@@ -77,7 +90,10 @@ define([
 
         '.add (manually set id)': [
             function () {
-                var id1 = 6,
+                clearLocalStorage();
+
+                var store = new LocalStorage({}),
+                    id1 = 6,
                     obj1 = {
                         id: id1,
                         name: 'six'
@@ -110,32 +126,72 @@ define([
             }
         ],
 
-        '.add (store sets id)': [
+        '.add (no id)': [
             function () {
-                var name = 'eight',
-                    obj1 = {
-                        name: name
+                clearLocalStorage();
+
+                var store = new LocalStorage({}),
+                    obj = {
+                        name: 'object-without-id'
+                    },
+                    exception = null
+                ;
+
+                store.add(obj);
+            }
+        ],
+
+        '.add (throw exception if no id is given)': [
+            function () {
+                clearLocalStorage();
+
+                var store = new LocalStorage({
+                        generateIdentity: function () {
+                            throw new Error("No Id given");
+                        }
+                    }),
+                    obj = {
+                        name: 'object-without-id'
                     }
                 ;
 
-                store.add(obj1);
-                var result = store.query({ name: 'eight' })[0];
-                assert.isNumber(result.id, 'id should be a number');
+                try {
+                    store.add(obj);
+                } catch(e) {
+                    exception = e;
+                }
+
+                assert.isObject(exception, 'exception should be thrown when calling add() without id');
             }
         ],
 
         '.query': [
             function () {
-                var results = store.query({ prime: true });
+                clearLocalStorage();
+
+                var store = new LocalStorage({
+                        data: [
+                            { id: 1, name: 'one', prime: true },
+                            { id: 2, name: 'two', prime: false },
+                            { id: 3, name: 'three', prime: true },
+                            { id: 4, name: 'four', prime: false },
+                            { id: 5, name: 'five', prime: true }
+                        ]
+                    }),
+                    results = store.query({ prime: true })
+                ;
+
                 assert.strictEqual(results.length, 3, 'three prime results should be found');
             }
         ],
 
         '.query (pre-configured data subset)': [
             function () {
+                clearLocalStorage();
+
                 var store = new LocalStorage({
                         subsetProperty: 'mySubsetProperty',
-                        subsetName: 'movies',
+                        subsetName: 'movies2',
                         data: [
                             { id: 11, name: 'one', prime: true },
                             { id: 12, name: 'two', prime: false },
@@ -153,7 +209,32 @@ define([
 
         '.query (query in full data set)': [
             function () {
-                var results = store.query({ prime: true });
+                clearLocalStorage();
+
+                var store1 = new LocalStorage({
+                        data: [
+                            { id: 1, name: 'one', prime: true },
+                            { id: 2, name: 'two', prime: false },
+                            { id: 3, name: 'three', prime: true },
+                            { id: 4, name: 'four', prime: false },
+                            { id: 5, name: 'five', prime: true }
+                        ]
+                    }),
+                    store2 = new LocalStorage({
+                        subsetProperty: 'mySubsetProperty',
+                        subsetName: 'movies',
+                        data: [
+                            { id: 6, name: 'one', prime: true },
+                            { id: 7, name: 'two', prime: false },
+                            { id: 8, name: 'three', prime: true },
+                            { id: 9, name: 'four', prime: false },
+                            { id: 10, name: 'five', prime: true }
+                        ]
+                    }),
+                    results = store1.query({ prime: true })
+                ;
+
+                //dumpLocalStorage();
                 assert.strictEqual(results.length, 6, 'six prime results should be found');
             }
         ]

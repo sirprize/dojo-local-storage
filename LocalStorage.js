@@ -84,6 +84,10 @@ define([
             return object[this.idProperty];
         },
 
+        generateIdentity: function () {
+            return Math.random();
+        },
+
         put: function (object, options) {
             // summary:
             //      Stores an object
@@ -93,7 +97,7 @@ define([
             //      Additional metadata for storing the data. Includes an "id"
             //      property if a specific id is to be used.
             // returns: Number
-            var id = (options && options.id) || object[this.idProperty] || Math.random();
+            var id = (options && options.id) || object[this.idProperty] || this.generateIdentity();
 
             if (this.subsetProperty) {
                 object[this.subsetProperty] = this.subsetName;
