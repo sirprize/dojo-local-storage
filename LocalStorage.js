@@ -112,7 +112,8 @@ define([
             //      Additional metadata for storing the data. Includes an "id"
             //      property if a specific id is to be used.
             // returns: Number
-            if (this.get(object[this.idProperty])) {
+            var id = (options && options.id) || object[this.idProperty];
+            if (this.get(id)) {
                 throw new Error("Object already exists");
             }
 
