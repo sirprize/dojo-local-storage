@@ -6,5 +6,9 @@
     "devDependencies": {
         "intern": "~1.4.0",
         "dojo": "~1.9.2"
+    },
+    "repository": {
+		"type": "git",
+		"url": "https://github.com/sirprize/dojo-local-storage.git"
     }
 }
