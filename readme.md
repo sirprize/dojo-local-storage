@@ -47,9 +47,6 @@ LocalStorage only works with key/value pairs where value is a string. Dojo-local
         
         // deleting an object
         store.remove('abc');
-        
-        // clear everything from LocalStorage
-        store.clear();
     });
 
 ## Working With A Data Subset By Configuration
