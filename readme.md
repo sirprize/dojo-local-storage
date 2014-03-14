@@ -24,6 +24,8 @@ LocalStorage only works with key/value pairs where value is a string. Dojo-local
         var id = store.add({
             title: 'Elementarteilchen',
             year: 2006
+        },{
+            id: 'abc'
         });
         
         // querying the store
@@ -41,7 +43,7 @@ LocalStorage only works with key/value pairs where value is a string. Dojo-local
         });
         
         // getting an object
-        var object = store.put('abc');
+        var object = store.get('abc');
         
         // deleting an object
         store.remove('abc');
