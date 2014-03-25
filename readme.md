@@ -22,8 +22,7 @@ require(["dojo-local-storage/LocalStorage"], function (LocalStorage) {
     // storing an object
     var id = store.add({
         title: 'Elementarteilchen',
-        year: 2006
-    },{
+        year: 2006,
         id: 'abc'
     });
 
