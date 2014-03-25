@@ -88,6 +88,24 @@ define([
             }
         ],
 
+        '.put (no id)': [
+            function () {
+                clearLocalStorage();
+
+                var store = new LocalStorage({}),
+                    exception = null
+                ;
+
+                try {
+                    store.put({});
+                } catch(e) {
+                    exception = e;
+                }
+
+                assert.isObject(exception, 'exception should be thrown when calling put() without id');
+            }
+        ],
+
         '.add (manually set id)': [
             function () {
                 clearLocalStorage();
@@ -133,8 +151,7 @@ define([
                 var store = new LocalStorage({}),
                     obj = {
                         name: 'object-without-id'
-                    },
-                    exception = null
+                    }
                 ;
 
                 store.add(obj);

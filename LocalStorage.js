@@ -97,7 +97,11 @@ define([
             //      Additional metadata for storing the data. Includes an "id"
             //      property if a specific id is to be used.
             // returns: Number
-            var id = (options && options.id) || object[this.idProperty] || this.generateIdentity();
+            var id = (options && options.id) || object[this.idProperty];
+
+            if (!id) {
+                throw new Error("Missing Id");
+            }
 
             if (this.subsetProperty) {
                 object[this.subsetProperty] = this.subsetName;
@@ -116,11 +120,13 @@ define([
             //      Additional metadata for storing the data. Includes an "id"
             //      property if a specific id is to be used.
             // returns: Number
-            var id = (options && options.id) || object[this.idProperty];
+            var id = (options && options.id) || object[this.idProperty] || this.generateIdentity();
+
             if (this.get(id)) {
                 throw new Error("Object already exists");
             }
 
+            object.id = id;
             return this.put(object, options);
         },
 
